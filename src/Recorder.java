@@ -6,14 +6,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.VideoWriter;
 import org.opencv.videoio.Videoio;
@@ -158,7 +153,7 @@ public class Recorder {
 			throw new IllegalArgumentException("Missing attributes");
 		}
 	  	writer = new VideoWriter();		
-		cap = new VideoCapture(0);
+		cap = new VideoCapture(1);
 		if(!cap.isOpened()){
 			throw new UnsupportedOperationException("Unable to open VideoCapture");
 		}

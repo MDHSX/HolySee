@@ -15,8 +15,8 @@ public class Main {
 
 		Hashtable<String, String> recordSettings = new Hashtable<String,String>();
 		recordSettings.put(Recorder.SETTING_FILENAME, "video.avi");
-		recordSettings.put(Recorder.SETTING_FRAMERATE, "25");
-		recordSettings.put(Recorder.SETTING_MAX_LENGTH, "6");
+		recordSettings.put(Recorder.SETTING_FRAMERATE, "10");
+		recordSettings.put(Recorder.SETTING_MAX_LENGTH, "10");
 
 		Recorder recorder = new Recorder(recordSettings);
 //		Recorder recorder = new Cosine(cosineSettings);
