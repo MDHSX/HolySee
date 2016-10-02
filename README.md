@@ -1,6 +1,6 @@
 # HolySee
 
-This repository contains Team 4141's Robot Vision solution.  For background information, see [Robot Vision Concepts](Robot Vision Concepts).
+This repository contains Team 4141's Robot Vision solution.  For background information, see [Robot Vision Concepts](https://github.com/MDHSRobotics/TeamWiki/wiki/Robot%20Vision%20Concepts).
 
 This repository contains the following projects:
 1. c++ shared library which contains the C++ code that does the image processing work
