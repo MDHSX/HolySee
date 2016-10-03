@@ -25,10 +25,8 @@
             '<md-divider></md-divider>'+
           '<md-content scroll-bottom="events">'+
               '<div ng-repeat="event in events  track by $index">'+
-                 '<div ng-if="event.eventType==\'RobotConfigurationNotification\'"><log-configuration ng-show="showEvent(event)" data-event="event"></log-configuration></div>'+
-                 '<div ng-if="event.eventType==\'Heartbeat\'"><log-heartbeat ng-show="showEvent(event)" data-event="event"></log-heartbeat></div>'+
-                 '<div ng-if="event.eventType==\'ConsoleRumbleNotification\'"><log-rumble ng-show="showEvent(event)" data-event="event"></log-rumble></div>'+
-                 '<div ng-if="event.eventType==\'RobotLogNotification\'"><log-message data-event="event" ng-show="showEvent(event)"></log-message></div>'+
+                 '<div ng-if="event.eventType==\'LogNotification\'"><log-message data-event="event" ng-show="showEvent(event)"></log-message></div>'+
+                 '<div ng-if="event.eventType==\'ConfigurationNotification\'"><div ng-show="showEvent(event)">{{event}}</div></div>'+
                 // '<div>{{event}}</div>'+
               '</div>'+
           '</md-content>'+
@@ -63,7 +61,7 @@
 
     $scope.showEvent = function(event){
       var show = false;
-      if(event.eventType == 'RobotLogNotification'){
+      if(event.eventType == 'LogNotification'){
         // $log.info('show for RobotLogNotification');
         switch(event.level){
           case 'ERROR':
@@ -74,7 +72,7 @@
             return $scope.showWarnings;
         }
       }
-      else if(event.eventType == 'Heartbeat' || event.eventType == 'ConsoleRumbleNotification' || event.eventType == 'RobotConfigurationNotification'){
+      else if(event.eventType == 'ConfigurationNotification'){
         return $scope.showInfo;
       }
       return show; 

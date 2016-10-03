@@ -20,12 +20,14 @@
       <div layout="row" layout-wrap>
         <div>Vison</div>
         <div flex></div>
-        <div class="indicator" ng-class="{'connected':isConnected}"><md-icon>android</md-icon></div>
-        <md-button ng-click="toggleRight('settings')"><div class="indicator"><md-icon>settings</md-icon></div></md-button>
-        <md-button ng-click="toggleRight('event-log')"><div class="indicator"><md-icon>message</md-icon><badge data-count="getEventsCount()"></badge></div></md-button>
+        <md-button ng-click="toggleConnected()"><div class="indicator"><md-icon>android</md-icon></div></md-button>
+        <md-button ng-click="toggleShowSettings()"><div class="indicator"><md-icon>settings</md-icon></div></md-button>
+        <md-button ng-click="toggleShowEventLog()"><div class="indicator"><md-icon>message</md-icon><badge data-count="getEventsCount()"></badge></div></md-button>
       </div>
-      <event-log  ng-show="showEventLog"></event-log>  
-      <feed  ng-show="mode=='event-log'"></feed>  
+      <div>isConnected: {{isConnected}}</div>
+      <core-settings ng-show="showFeedSettings"></core-settings>
+      <event-log ng-show="showEventLog"></event-log>  
+      <feed></feed>  
     </div>
 
     <script src="scripts/lib/angular.min.js"></script>
@@ -42,6 +44,7 @@
     <script src="scripts/app/directives/LogMessageDirective.js"></script>
     <script src="scripts/app/directives/BadgeDirective.js"></script>
     <script src="scripts/app/directives/FeedStateDirective.js"></script>
+    <script src="scripts/app/directives/CoreSettingsDirective.js"></script>
 
  </body>
 </html>

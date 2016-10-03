@@ -1,7 +1,8 @@
 //This service manages communicaitons with the robot
 (function(){
     // var robotAddress = "ws://172.22.11.2:5808";
-    var robotAddress = 'ws://roboRIO-4141-FRC.local:5808';
+    // var robotAddress = 'ws://roboRIO-4141-FRC.local:5808';
+    var robotAddress = "ws://127.0.0.1:5808";
 
     function service($q,$log,$timeout, $interval,$rootScope){
         $log.info("FeedService");
@@ -32,9 +33,8 @@
         }
 
 
-        var robotConfig = {
-            subsystems:[],
-            consoleOI:{}
+        var config = {
+            settings:[]
         };
 
         var serviceObj = {
@@ -45,41 +45,26 @@
                 isConnected:false,
                 toggleConnected:toggleConnected,
                 state: 'Disabled',
-                robotConfig: robotConfig,
+                feedConfig: config,
                 reconnect:reconnect
             };
 
         var process=function(event){
             var eventObj=JSON.parse(event);
-            // if (!(eventObj.eventType =="Heartbeat")){
-            //     $log.info(event);
-            // }
-            if(eventObj.hasOwnProperty('fpgaTime')){
-                // $log.info('has fpgaTime');
-                eventObj.fpgaTime = Math.round(eventObj.fpgaTime * 100) / 100;
-                // $log.info('time = '+event.fpgaTime);
-            }
 
-            // $log.info(eventObj);
             if(eventObj.display) {
-                $timeout(function(){events.push(eventObj);});
-                if(events.length>eventcapacity) events.shift();
+                // $log.info('events size: '+events.length);
+                // $log.info(eventObj);
+                $timeout(function(){events.push(eventObj);
+                    if(events.length>eventcapacity) events.shift();
+                    // $log.info('events size: '+events.length);
+                });
             }
             if(eventObj.record) DatabaseService.record(eventObj);      
-            if (eventObj.eventType =="RobotConfigurationNotification"){
-                // $log.info('processing RobotConfigurationNotification:');
-                // $log.info(eventObj);
+            if(eventObj.eventType=='ConfigurationNotification') {
                 updateConfiguration(eventObj);
-            }      
-            if (eventObj.eventType =="Heartbeat"){
-                // $log.info('processing Heartbeat:');
-                // $log.info(eventObj);
-                // $timeout(function(){events.push(eventObj);});
-                update(eventObj);
-            }     
-            if(eventObj.eventType =="ConsoleRumbleNotification"){
-                consoleRumble(eventObj);
             }
+            
         };
     
         index = 0;
@@ -87,7 +72,7 @@
         var onopen = function(){
             $log.info('WS CONNECTED!');
             $interval.cancel(connector);            
-            this.send('{"command":"connect"}');
+            this.send('{"client":"operator-console"}');
             serviceObj.isConnected = true;
         };
         var onmessage = function(evt){
@@ -128,25 +113,27 @@
         connect();
         return serviceObj;  
 
-        function updateConfiguration(robotConfig){
-            // $log.info('robot config:');
-            // $log.info(robotConfig);
+        function updateConfiguration(event){
+            $log.info('config:');
+            $log.info(event);
             // serviceObj.clock.fpgaTime=0.0;
-            if(robotConfig.hasOwnProperty('fpgaTime')){
-                // $log.info('config fpgaTime');
-                serviceObj.clock.fpgaTime = robotConfig.fpgaTime;
+            if(config.hasOwnProperty('settings')){
+                $log.info('settings:');
+                $log.info(event.settings);
+                config.settings = event.settings; 
+            //     serviceObj.clock.fpgaTime = robotConfig.fpgaTime;
             }
-            serviceObj.robotConfig.subsystems={};
-            if(robotConfig.hasOwnProperty('subsystems')){
-                // $log.info('config subsystems');
-                serviceObj.robotConfig.subsystems = robotConfig.subsystems;
-            }
+            // serviceObj.robotConfig.subsystems={};
+            // if(robotConfig.hasOwnProperty('subsystems')){
+            //     // $log.info('config subsystems');
+            //     serviceObj.robotConfig.subsystems = robotConfig.subsystems;
+            // }
    
-            serviceObj.robotConfig.consoleOI={};
-            if(robotConfig.hasOwnProperty('consoleOI')){
-                // $log.info('config consoleOI');
-                serviceObj.robotConfig.consoleOI = robotConfig.consoleOI;
-            }         
+            // serviceObj.robotConfig.consoleOI={};
+            // if(robotConfig.hasOwnProperty('consoleOI')){
+            //     // $log.info('config consoleOI');
+            //     serviceObj.robotConfig.consoleOI = robotConfig.consoleOI;
+            // }         
         }
 
         function reconnect(){

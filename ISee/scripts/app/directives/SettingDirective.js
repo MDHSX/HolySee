@@ -62,7 +62,7 @@
   	}
   };
 
-  var controller = function($scope, $log, $mdSidenav, RobotService){
+  var controller = function($scope, $log, $mdSidenav, FeedService){
     // $log.info('settingController');
     // $log.info('setting:');
     // $log.info($scope.setting);
@@ -83,8 +83,7 @@
     $scope.calcStep = calcStep;
     $scope.change = function(){
             var message='{"type":"settingUpdate", '+
-                       '"subsystem":"'+ $scope.setting.subsystem + 
-                       '", "settingName":"'+ $scope.setting.name + 
+                       '"settingName":"'+ $scope.setting.name + 
                        '", "value":"'+ $scope.setting.value +
                        '"';
             if($scope.setting.type == 'decimal' || $scope.setting.type == 'integer' ){
@@ -99,7 +98,7 @@
                       //TODO check for setting min and max and add to message
       $log.info($scope.setting);
       $log.info(message);
-      RobotService.post(message);
+      FeedService.post(message);
     };
     $scope.configure=false;
     $scope.openConfigure = function(){
@@ -113,5 +112,5 @@
 
   angular.module('HolySee')
   .directive('setting',[directive])
-  .controller('settingController',['$scope', '$log', '$mdSidenav','RobotService', controller]);
+  .controller('settingController',['$scope', '$log', '$mdSidenav','FeedService', controller]);
 }());

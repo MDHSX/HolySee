@@ -7,9 +7,23 @@
 
 	    $scope.state = FeedService.state;
 	    $scope.isConnected = FeedService.isConnected;
+	    $scope.showEventLog = false;
+	    $scope.showFeedSettings = false;
 
 	    $scope.toggleConnected = function(){
 	      FeedService.toggleConnected();
+	    };
+
+	    $scope.toggleShowEventLog = function(){
+		    $scope.showEventLog = !$scope.showEventLog;
+	    };
+
+	    $scope.toggleShowSettings = function(){
+		    $scope.showFeedSettings = !$scope.showFeedSettings;
+	    };
+	    
+	    $scope.getEventsCount=function(){
+	    	return FeedService.getEventsCount();
 	    };
 
 	    $scope.$watch(function(){return FeedService.state;},function(){$scope.state = FeedService.state;});      
