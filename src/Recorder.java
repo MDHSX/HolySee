@@ -153,7 +153,7 @@ public class Recorder {
 			throw new IllegalArgumentException("Missing attributes");
 		}
 	  	writer = new VideoWriter();		
-		cap = new VideoCapture(1);
+		cap = new VideoCapture(0);
 		if(!cap.isOpened()){
 			throw new UnsupportedOperationException("Unable to open VideoCapture");
 		}
