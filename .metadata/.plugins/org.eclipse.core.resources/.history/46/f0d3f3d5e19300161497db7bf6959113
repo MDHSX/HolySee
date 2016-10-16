@@ -1,0 +1,26 @@
+package team4141.robotvision.msee;
+
+import javax.jmdns.ServiceEvent;
+import javax.jmdns.ServiceListener;
+
+public class DNSSDBrowser implements ServiceListener{
+
+	public void serviceAdded(ServiceEvent event) {
+		// TODO Auto-generated method stub
+		System.out.println("service added:");
+		System.out.println(event.getName());
+		System.out.println(event.getType());
+		System.out.println(event.getInfo().getURLs());
+	}
+
+	public void serviceRemoved(ServiceEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void serviceResolved(ServiceEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

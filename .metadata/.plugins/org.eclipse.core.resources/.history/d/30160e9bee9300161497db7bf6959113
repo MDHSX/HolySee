@@ -1,0 +1,54 @@
+package team4141.robotvision.msee;
+
+import java.io.IOException;
+
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceEvent;
+import javax.jmdns.ServiceListener;
+
+public class RoboRioListener implements ServiceListener,Runnable {
+
+	public static final String SERVICE_TYPE="_ssh._tcp.local.";
+	private JmDNS jmdns;
+	
+	@Override
+	public void serviceAdded(ServiceEvent event) {
+		System.out.println("service added:");
+		System.out.println(event.getName());
+		System.out.println(event.getType());
+		for(String url : event.getInfo().getURLs())
+			System.out.println(url);
+
+	}
+
+	@Override
+	public void serviceRemoved(ServiceEvent event) {
+		System.out.println("service removed:");
+		System.out.println(event.getName());
+		System.out.println(event.getType());
+		for(String url : event.getInfo().getURLs())
+			System.out.println(url);	
+
+	}
+
+	@Override
+	public void serviceResolved(ServiceEvent event) {
+		System.out.println("service resolved:");
+		System.out.println(event.getName());
+		System.out.println(event.getType());
+		for(String url : event.getInfo().getURLs())
+			System.out.println(url);		
+	}
+
+	@Override
+	public void run() {
+		 try {
+			jmdns = JmDNS.create();
+			jmdns.addServiceListener(SERVICE_TYPE, this);
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+		
+	}
+
+}
