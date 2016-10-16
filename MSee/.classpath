@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="/Users/martin/Desktop/robotics/Repositories/HolySee/MSee/tools/gson-2.6.2.jar"/>
+	<classpathentry kind="lib" path="/Users/martin/Desktop/robotics/Repositories/HolySee/MSee/tools/jetty-http-9.3.7.v20160115.jar"/>
+	<classpathentry kind="lib" path="/Users/martin/Desktop/robotics/Repositories/HolySee/MSee/tools/jetty-io-9.3.7.v20160115.jar"/>
+	<classpathentry kind="lib" path="/Users/martin/Desktop/robotics/Repositories/HolySee/MSee/tools/jetty-server-9.3.7.v20160115.jar"/>
+	<classpathentry kind="lib" path="/Users/martin/Desktop/robotics/Repositories/HolySee/MSee/tools/jetty-util-9.3.7.v20160115.jar"/>
+	<classpathentry kind="lib" path="/Users/martin/Desktop/robotics/Repositories/HolySee/MSee/tools/servlet-api-3.1.jar"/>
+	<classpathentry kind="lib" path="/Users/martin/Desktop/robotics/Repositories/HolySee/MSee/tools/websocket-api-9.3.7.v20160115.jar"/>
+	<classpathentry kind="lib" path="/Users/martin/Desktop/robotics/Repositories/HolySee/MSee/tools/websocket-common-9.3.7.v20160115.jar"/>
+	<classpathentry kind="lib" path="/Users/martin/Desktop/robotics/Repositories/HolySee/MSee/tools/websocket-server-9.3.7.v20160115.jar"/>
+	<classpathentry kind="lib" path="/Users/martin/Desktop/robotics/Repositories/HolySee/MSee/tools/websocket-servlet-9.3.7.v20160115.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

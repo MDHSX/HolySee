@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="MDCOnsole" content="A custom robot console developed by Team 4141">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>HolySee</title>   
+    
+    <link rel="shortcut icon" href="mdlogo.jpg">
+
+    <link rel="stylesheet" href="css/material-icons.css">
+    <link rel="stylesheet" href="css/angular-material.min.css">
+    <link rel="stylesheet" href="css/HolySee.css">
+
+  </head>
+  <body ng-app="HolySee" ng-controller="HolySeeController as IC" ng-cloak >
+    <div layout="column">
+      <div layout="row" layout-wrap>
+        <div>Vison</div>
+        <div flex></div>
+        <md-button ng-click="toggleConnected()"><div class="indicator"><md-icon>android</md-icon></div></md-button>
+        <md-button ng-click="toggleShowSettings()"><div class="indicator"><md-icon>settings</md-icon></div></md-button>
+        <md-button ng-click="toggleShowEventLog()"><div class="indicator"><md-icon>message</md-icon><badge data-count="getEventsCount()"></badge></div></md-button>
+      </div>
+      <div>isConnected: {{isConnected}}</div>
+      <core-settings ng-show="showFeedSettings"></core-settings>
+      <event-log ng-show="showEventLog"></event-log>  
+      <feed></feed>  
+    </div>
+
+    <script src="scripts/lib/angular.min.js"></script>
+    <script src="scripts/lib/angular-animate.min.js"></script>
+    <script src="scripts/lib/angular-aria.min.js"></script>
+    <script src="scripts/lib/angular-messages.min.js"></script>
+    <script src="scripts/lib/angular-material.min.js"></script>
+
+    <script src="scripts/app/HolySee.js"></script>
+    <script src="scripts/app/services/FeedService.js"></script>
+    <script src="scripts/app/directives/EventLogDirective.js"></script>
+    <script src="scripts/app/directives/ScrollBottomDirective.js"></script>
+    <script src="scripts/app/directives/SettingDirective.js"></script>
+    <script src="scripts/app/directives/LogMessageDirective.js"></script>
+    <script src="scripts/app/directives/BadgeDirective.js"></script>
+    <script src="scripts/app/directives/FeedStateDirective.js"></script>
+    <script src="scripts/app/directives/CoreSettingsDirective.js"></script>
+
+ </body>
+</html>
