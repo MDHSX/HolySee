@@ -10,7 +10,6 @@ public class Dispatcher implements Runnable {
 		this.eventManager = eventManager;
 	}
 	
-	@Override
 	public void run() {
 //		System.out.println("dispatching");
 		eventManager.post();

@@ -16,7 +16,6 @@ public class BooleanConfigSetting implements ConfigSetting {
 		this.type = Type.binary;	
 	}	
 
-	@Override
 	public String getName() {
 		return name;
 	}
@@ -26,35 +25,28 @@ public class BooleanConfigSetting implements ConfigSetting {
 	}
 
 
-	@Override
 	public Type getType() {
 		return type;
 	}
 
-	@Override
 	public Object getValue() {
 		return value;
 	}
 
-	@Override
 	public Object getMin() {
 		return min;
 	}
 
-	@Override
 	public Object getMax() {
 		return max;
 	}
 
-	@Override
 	public void setMin(Object min) {
 	}
 
-	@Override
 	public void setMax(Object max) {
 	}
 
-	@Override
 	public void setValue(Object value) {
 		if(value instanceof Boolean){
 			this.value = (Boolean)value;
@@ -73,22 +65,18 @@ public class BooleanConfigSetting implements ConfigSetting {
 	}
 
 
-	@Override
 	public int getInt() {
 		return (value.booleanValue()?1:0);
 	}
 
-	@Override
 	public double getDouble() {
 		return (value.booleanValue()?1.0:0.0);
 	}
 
-	@Override
 	public String getString() {
 		return value.toString();
 	}
 
-	@Override
 	public String toJSON() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -102,9 +90,8 @@ public class BooleanConfigSetting implements ConfigSetting {
 		return sb.toString();
 	}
 
-	@Override
 	public boolean getBoolean() {
 		return value;
 	}
-
 }
+

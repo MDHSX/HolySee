@@ -17,68 +17,56 @@ public class StringConfigSetting implements ConfigSetting {
 		this.max = max;
 		this.type = Type.string;	
 	}
-	@Override
+
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void setName(String name){
 		this.name = name;
 	}
 
-	@Override
 	public Type getType() {
 		return type;
 	}
 
-	@Override
 	public Object getValue() {
 		return value;
 	}
 
-	@Override
 	public Object getMin() {
 		return min;
 	}
 
-	@Override
 	public Object getMax() {
 		return max;
 	}
 
-	@Override
 	public void setMin(Object min) {
 		this.min = min.toString();
 	}
 
-	@Override
 	public void setMax(Object max) {
 		this.max = max.toString();
 	}
 
-	@Override
 	public void setValue(Object value) {
 		this.value = (String)value;
 	}
 
 
-	@Override
 	public int getInt() {
 		throw new UnsupportedOperationException("function getInt() on a StringConfigItem is not implemented.");
 	}
 
-	@Override
 	public double getDouble() {
 		throw new UnsupportedOperationException("function getDouble() on a StringConfigItem is not implemented.");
 	}
 
-	@Override
 	public String getString() {
 		return value;
 	}
 
-	@Override
 	public String toJSON() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\"name\":\"");
@@ -100,7 +88,6 @@ public class StringConfigSetting implements ConfigSetting {
 	}
 
 
-	@Override
 	public boolean getBoolean() {
 		return Boolean.parseBoolean(value);
 	}

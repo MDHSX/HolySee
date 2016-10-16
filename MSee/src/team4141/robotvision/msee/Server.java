@@ -27,7 +27,6 @@ public class Server implements MessageHandler{
 		settings = new Hashtable<String, ConfigSetting>();
 	}
 
-	@Override
 	public void process(String messageText) {
 //		System.out.println("Robot received message: "+messageText);
 		Map message = JSON.parse(messageText);
@@ -83,7 +82,6 @@ public class Server implements MessageHandler{
 			e.printStackTrace();		}
 	}
 	
-	@Override
 	public void connect() {
 		eventManager.post(new LogNotification(LogNotification.Level.INFO, "Server.connect()", "server received client connection"));
 		eventManager.post(new ConfigurationNotification(this));

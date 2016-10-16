@@ -14,7 +14,6 @@ public class IntegerConfigSetting implements ConfigSetting {
 		this.type = Type.integer;		
 	}	
 
-	@Override
 	public String getName() {
 		return name;
 	}
@@ -23,27 +22,22 @@ public class IntegerConfigSetting implements ConfigSetting {
 		this.name = name;
 	}
 
-	@Override
 	public Type getType() {
 		return type;
 	}
 
-	@Override
 	public Object getValue() {
 		return value;
 	}
 
-	@Override
 	public Object getMin() {
 		return min;
 	}
 
-	@Override
 	public Object getMax() {
 		return max;
 	}
 
-	@Override
 	public void setMin(Object min) {
 		if(min instanceof Integer){
 			this.min = (Integer)min;
@@ -59,7 +53,6 @@ public class IntegerConfigSetting implements ConfigSetting {
 		}
 	}
 
-	@Override
 	public void setMax(Object max) {
 		if(max instanceof Integer){
 			this.max = (Integer)max;
@@ -75,7 +68,6 @@ public class IntegerConfigSetting implements ConfigSetting {
 		}
 	}
 
-	@Override
 	public void setValue(Object value) {
 		if(value instanceof Integer){
 			this.value = (Integer)value;
@@ -93,23 +85,19 @@ public class IntegerConfigSetting implements ConfigSetting {
 	}
 
 
-	@Override
 	public int getInt() {
 		return value.intValue();
 	}
 
-	@Override
 	public double getDouble() {
 		return value.intValue();
 	}
 
-	@Override
 	public String getString() {
 		return value.toString();
 	}
 
 
-	@Override
 	public String toJSON() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\"name\":\"");
@@ -126,7 +114,6 @@ public class IntegerConfigSetting implements ConfigSetting {
 		return sb.toString();
 	}
 
-	@Override
 	public boolean getBoolean() {
 		if (value == 0) return false;
 		return true;
