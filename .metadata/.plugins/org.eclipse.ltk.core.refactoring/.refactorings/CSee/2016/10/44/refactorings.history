@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;CSee/CSee&apos; to &apos;CSee.h&apos;" description="Rename resource &apos;CSee&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="CSee" name="CSee.h" stamp="1477701728826" updateReferences="true"/>
-</session>

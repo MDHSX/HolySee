@@ -1,6 +1,0 @@
-package team4141.robotvision.msee;
-
-public class CSee {
-//This class interfaces with the CSee C++ video processing through JNI
-	
-}
