@@ -14,17 +14,20 @@ public class Main {
 //			.configure();
 //		server.start();
 
-	    new Thread(new RoboRioListener()) .start();
+//	    new Thread(new RoboRioListener()) .start();
 	    
 //		while(server.isRunning()){
-		boolean done = false;
-		while(!done){
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				
-			}
-		}
+//		boolean done = false;
+//		while(!done){
+//			try {
+//				Thread.sleep(100);
+//			} catch (InterruptedException e) {
+//				
+//			}
+//		}
+		
+		CSee csee = new CSee();
+		
 		System.out.println("MSee server shutting down ... ");
 	}
 
