@@ -87,12 +87,13 @@ JNIEXPORT void JNICALL Java_team4141_robotvision_msee_CSee_setCameraProperty
 	double value;
 	if((int)propertyId == cv::CAP_PROP_FOURCC){
 		value = cv::VideoWriter::fourcc(resultCStr[0],resultCStr[1],resultCStr[2],resultCStr[3]);
+		std::cout<<"setting camera[" << (int)cameraId << "]: "<< (int)propertyId <<" to "<< CSee::decodeFourCC((int)value) << std::endl;
 	}
 	else{
 		value = std::atof(resultCStr);
+		std::cout<<"setting camera[" << (int)cameraId << "]: "<< (int)propertyId <<" to "<< std::to_string(value) << std::endl;
 	}
 	env->ReleaseStringUTFChars(jValue, resultCStr);
-	std::cout<<"setting camera[" << (int)cameraId << "]: "<< (int)propertyId <<" to "<< CSee::decodeFourCC((int)value) << std::endl;
 }
 
 JNIEXPORT void JNICALL Java_team4141_robotvision_msee_CSee_setFilter
@@ -116,7 +117,7 @@ std::map<int, std::string> CSee::createPropertyNames() {
 	names[cv::CAP_PROP_FOURCC]="CAP_PROP_FOURCC";
 	names[cv::CAP_PROP_FRAME_WIDTH]="CAP_PROP_FRAME_WIDTH";
 	names[cv::CAP_PROP_FRAME_HEIGHT]="CAP_PROP_FRAME_HEIGHT";
-	names[cv::CAP_PROP_GAIN]="CAP_PROP_GAIN";
+//	names[cv::CAP_PROP_GAIN]="CAP_PROP_GAIN";
 //	names[cv::CAP_PROP_GAMMA]="CAP_PROP_GAMMA";
 	names[cv::CAP_PROP_SATURATION]="CAP_PROP_SATURATION";
 //	names[cv::CAP_PROP_SHARPNESS]="CAP_PROP_SHARPNESS";
@@ -124,12 +125,12 @@ std::map<int, std::string> CSee::createPropertyNames() {
 //	names[cv::CAP_PROP_POS_FRAMES]="CAP_PROP_POS_FRAMES";
 	names[cv::CAP_PROP_POS_MSEC]="CAP_PROP_POS_MSEC";
 //	names[cv::CAP_PROP_APERTURE]="CAP_PROP_APERTURE";
-	names[cv::CAP_PROP_AUTOFOCUS]="CAP_PROP_AUTOFOCUS";
+//	names[cv::CAP_PROP_AUTOFOCUS]="CAP_PROP_AUTOFOCUS";
 //	names[cv::CAP_PROP_BACKLIGHT]="CAP_PROP_BACKLIGHT";
 //	names[cv::CAP_PROP_BUFFERSIZE]="CAP_PROP_BUFFERSIZE";
 //	names[cv::CAP_PROP_FOCUS]="CAP_PROP_FOCUS";
 //	names[cv::CAP_PROP_IRIS]="CAP_PROP_IRIS";
-	names[cv::CAP_PROP_ISO_SPEED]="CAP_PROP_ISO_SPEED";
+//	names[cv::CAP_PROP_ISO_SPEED]="CAP_PROP_ISO_SPEED";
 	return names;
 }
 
