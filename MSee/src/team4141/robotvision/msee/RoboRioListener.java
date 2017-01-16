@@ -5,12 +5,13 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 
 import javax.jmdns.JmDNS;
+import javax.jmdns.NetworkTopologyDiscovery;
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceListener;
 
 public class RoboRioListener implements ServiceListener,Runnable {
 
-	public static final String SERVICE_TYPE="_ssh._tcp.local.";
+	public static final String SERVICE_TYPE="_ws._tcp.local.";
 	public static final String SERVICE_NAME="roboRIO-4141-FRC";
 	private JmDNS jmdns;
 	
@@ -38,14 +39,18 @@ public class RoboRioListener implements ServiceListener,Runnable {
 	@Override
 	public void run() {
 		System.out.println("service browser started.");
-		 try {
-			jmdns = JmDNS.create(InetAddress.getLocalHost());
-			jmdns.addServiceListener(SERVICE_TYPE, this);
-			jmdns.addServiceListener("_http._tcp.local.", this);
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
+		InetAddress[] addresses = NetworkTopologyDiscovery.Factory.getInstance().getInetAddresses();
+		for(InetAddress addr: addresses){
+			if(addr.getHostName().contains("41.41")){
+				try {
+					jmdns = JmDNS.create(addr);
+					jmdns.addServiceListener(SERVICE_TYPE, this);
+					jmdns.addServiceListener("_ws._tcp.local.", this);
+				} catch (IOException e) {
+					System.err.println(e.getMessage());
+				}
+			}
 		}
-		
 	}
 
 }
