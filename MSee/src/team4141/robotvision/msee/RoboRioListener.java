@@ -11,29 +11,36 @@ import javax.jmdns.ServiceListener;
 
 public class RoboRioListener implements ServiceListener,Runnable {
 
+	private ConnectionHandler connectionHandler;
+
+	public RoboRioListener(ConnectionHandler connectionHandler) {
+		super();
+		this.connectionHandler = connectionHandler;
+	}
+
 	public static final String SERVICE_TYPE="_ws._tcp.local.";
-	public static final String SERVICE_NAME="roboRIO-4141-FRC";
+	public static final String SERVICE_NAME="Team4141Robot";
 	private JmDNS jmdns;
 	
 	@Override
 	public void serviceAdded(ServiceEvent event) {
-		System.out.println("service added: "+event.getInfo());
+
 	}
 
 	@Override
 	public void serviceRemoved(ServiceEvent event) {
-		System.out.println("service removed: "+event.getInfo());
-		System.out.println(event.getName());
-		System.out.println(event.getType());	
+
 	}
 
 	@Override
 	public void serviceResolved(ServiceEvent event) {
-		System.out.println("service resolved: "+event.getInfo());
-		System.out.println(event.getName());
-		System.out.println(event.getType());
-		for(Inet4Address address : event.getInfo().getInet4Addresses())
-			System.out.println("-->"+address.getHostAddress());
+		if(SERVICE_NAME.equals(event.getName()) && SERVICE_TYPE.equals(event.getType()) && event.getInfo()!=null)
+		{
+			Inet4Address[] addresses = event.getInfo().getInet4Addresses();
+			if(addresses!=null && addresses.length>0){
+				connectionHandler.onConnect(event.getInfo().getName(),addresses[0],event.getInfo().getPort());
+			}
+		}
 	}
 
 	@Override
@@ -45,7 +52,6 @@ public class RoboRioListener implements ServiceListener,Runnable {
 				try {
 					jmdns = JmDNS.create(addr);
 					jmdns.addServiceListener(SERVICE_TYPE, this);
-					jmdns.addServiceListener("_ws._tcp.local.", this);
 				} catch (IOException e) {
 					System.err.println(e.getMessage());
 				}

@@ -1,12 +1,17 @@
 package team4141.robotvision.msee;
 
+import java.net.Inet4Address;
+import java.net.URI;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.usfirst.frc.team4141.MDRobotBase.config.ConfigSetting;
+import org.usfirst.frc.team4141.MDRobotBase.eventmanager.ClientSocket;
 import org.usfirst.frc.team4141.MDRobotBase.eventmanager.Dispatcher;
 import org.usfirst.frc.team4141.MDRobotBase.eventmanager.EventManager;
 import org.usfirst.frc.team4141.MDRobotBase.eventmanager.JSON;
@@ -103,5 +108,31 @@ public class Server implements MessageHandler{
 	}
 
 	public void configure() {
+	}
+
+	public void connect(String serviceName, Inet4Address address, int port) {
+        String destUri = "ws:/"+address+":"+port;
+
+
+        ClientSocket clientSocket = new ClientSocket();
+        WebSocketClient client = new WebSocketClient();
+
+        try
+        {
+            client.start();
+
+            URI uri = new URI(destUri);
+            System.out.println("connecting to :"+destUri);
+            client.connect(clientSocket,uri);
+            System.out.printf("Connecting to : %s%n",uri);
+
+           
+        }
+        catch (Throwable t)
+        {
+        	System.out.println("some error occured");
+            t.printStackTrace();
+        }
+		
 	}
 }

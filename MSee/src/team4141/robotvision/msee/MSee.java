@@ -1,24 +1,26 @@
 package team4141.robotvision.msee;
 
-import java.io.IOException;
 import java.net.Inet4Address;
 
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceEvent;
-import javax.jmdns.ServiceListener;
 
 public class MSee{
 
 	public static void main(String[] args) {
 		System.out.println("starting MSee server ... ");
-///		Server server = new Server();
+		final Server server = new Server();
 //		server
 //		.add("frameRate", new IntegerConfigSetting(new Integer(1), new Integer(30), new Integer(20)))
 //		.add("serverName", new StringConfigSetting("HolySee"))
-//		.configure();
-//		server.start();
+//		.configure();(
+		server.start();
 
-        new Thread(new RoboRioListener()) .start();
+        new Thread(new RoboRioListener(new ConnectionHandler() {
+			
+			@Override
+			public synchronized void onConnect(String serviceName, Inet4Address address, int port) {
+				server.connect(serviceName,address,port);
+			}
+		})) .start();
     
 		
 		MSee msee = new MSee();

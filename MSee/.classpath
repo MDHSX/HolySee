@@ -2,17 +2,19 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="tools/websocket-api-9.3.7.v20160115.jar"/>
-	<classpathentry kind="lib" path="tools/websocket-common-9.3.7.v20160115.jar"/>
-	<classpathentry kind="lib" path="tools/websocket-server-9.3.7.v20160115.jar"/>
-	<classpathentry kind="lib" path="tools/websocket-servlet-9.3.7.v20160115.jar"/>
 	<classpathentry kind="lib" path="tools/gson-2.6.2.jar"/>
-	<classpathentry kind="lib" path="tools/jetty-http-9.3.7.v20160115.jar"/>
-	<classpathentry kind="lib" path="tools/jetty-io-9.3.7.v20160115.jar"/>
-	<classpathentry kind="lib" path="tools/jetty-server-9.3.7.v20160115.jar"/>
-	<classpathentry kind="lib" path="tools/jetty-util-9.3.7.v20160115.jar"/>
 	<classpathentry kind="lib" path="tools/servlet-api-3.1.jar"/>
 	<classpathentry kind="lib" path="tools/slf4j-api-1.7.21.jar"/>
 	<classpathentry kind="lib" path="tools/slf4j-simple-1.7.21.jar"/>
+	<classpathentry kind="lib" path="tools/jetty-http-9.4.0.v20161208.jar"/>
+	<classpathentry kind="lib" path="tools/jetty-io-9.4.0.v20161208.jar"/>
+	<classpathentry kind="lib" path="tools/jetty-server-9.4.0.v20161208.jar"/>
+	<classpathentry kind="lib" path="tools/jetty-util-9.4.0.v20161208.jar"/>
+	<classpathentry kind="lib" path="tools/websocket-api-9.4.0.v20161208.jar"/>
+	<classpathentry kind="lib" path="tools/websocket-client-9.4.0.v20161208.jar"/>
+	<classpathentry kind="lib" path="tools/websocket-common-9.4.0.v20161208.jar"/>
+	<classpathentry kind="lib" path="tools/websocket-server-9.4.0.v20161208.jar"/>
+	<classpathentry kind="lib" path="tools/websocket-servlet-9.4.0.v20161208.jar"/>
+	<classpathentry kind="lib" path="tools/jetty-client-9.4.0.v20161208.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
