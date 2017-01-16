@@ -25,7 +25,13 @@ public class ClientSocket{
 	@OnWebSocketConnect
 	public void onConnect(Session session){
 		this.session = session;
-        System.out.println("session connected");
+        try {
+			session.getRemote().sendString("{\"type\":\"remoteIdentification\", \"id\":\"vision\"}");
+	        System.out.println("session connected");
+		} catch (IOException e) {
+			System.err.println("unable to send to remote");
+			e.printStackTrace();
+		}
 	}
 
 	@OnWebSocketClose

@@ -111,6 +111,7 @@ public class Server implements MessageHandler{
 	}
 
 	public void connect(String serviceName, Inet4Address address, int port) {
+		System.out.println("-->"+address+"<--");
         String destUri = "ws:/"+address+":"+port;
 
 
