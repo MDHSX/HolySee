@@ -55,6 +55,14 @@ JNIEXPORT void JNICALL Java_team4141_robotvision_msee_CSee_setCameraProperty
 JNIEXPORT void JNICALL Java_team4141_robotvision_msee_CSee_setFilter
   (JNIEnv *, jobject, jstring, jstring);
 
+/*
+ * Class:     team4141_robotvision_msee_CSee
+ * Method:    getConfig
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_team4141_robotvision_msee_CSee_getConfig
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

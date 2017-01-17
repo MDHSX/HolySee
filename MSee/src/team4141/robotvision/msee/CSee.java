@@ -21,19 +21,29 @@ public class CSee {
 	public native void switchTo(String streamName);
 	public native void setCameraProperty(int cameraId,int propertyId,String value);
 	public native void setFilter(String streamName,String filterName);
+	public native String getConfig();
 	
-	public void onInitialized(String jsonConfig){
-		System.out.println("initialization callback, received: "+jsonConfig);
-		GsonBuilder builder = new GsonBuilder();
-		Map CSeeConfig = builder.create().fromJson(jsonConfig, Map.class);
+	Map cseeConfig; 
+	
+	public void onInitialized(){
+		System.out.println("initialization callback");
 		setCameraProperty(0, 6,"YUYV");
-		setCameraProperty(0, 5,"10");
-		start();
+		setCameraProperty(0, 5,"20");
 		setFilter("0.ar", "targetDetect");
-		stop();
+		
+		GsonBuilder builder = new GsonBuilder();
+		String configData = getConfig();
+		cseeConfig = builder.create().fromJson(configData, Map.class);
+		System.out.println(configData);
+		start();
 	}
 	
 	public CSee() {
 		init();
 	}
+	
+	public void close() {
+		stop();
+		if(cseeConfig!=null) cseeConfig.clear();
+	} 
 }

@@ -22,7 +22,7 @@
 namespace CSee{
 std::map<int, std::string> createPropertyNames();
 extern const std::map<int, std::string> cameraPropertyNames = createPropertyNames();
-std::string disvocerCameras();
+void disvocerCameras();
 std::string decodeFourCC(int fourcc);
 Poco::JSON::Object makeCameraPropertyNode(int propertyId, std::string& key, std::string& value);
 
