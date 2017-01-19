@@ -15,7 +15,7 @@ private:
 	void calculateXY();
 	void calculateColor();
 public:
-	Reading::Reading(bool, float, float, unsigned char);
+	Reading(bool, float, float, unsigned char);
 	~Reading();
 	static const float range;
 	bool isSynch();

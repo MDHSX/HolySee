@@ -1,6 +1,7 @@
 #pragma once
-#include "Source.h"
 #include <vector>
+#include <string>
+#include "Source.h"
 #include "Reading.h"
 
 class LidarSource :

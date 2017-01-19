@@ -1,11 +1,9 @@
 // LidarSim.cpp : main project file.
 
-#include "stdafx.h"
 #include "LidarSource.h"
 
 
-int main(array<System::String ^> ^args)
-{
+int main(int argc,char *argv[]){
 	LidarSource* lidar = new LidarSource();
 	lidar->showScan();
 	delete lidar;
