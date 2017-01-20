@@ -2,22 +2,32 @@ package team4141.robotvision.msee;
 
 
 import java.net.URI;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
+import team4141.robotvision.msee.scratch.CSeeScratch;
 
-public class MSee implements ServiceDiscoveryHandler {
-	private CSee csee;
+
+public class MSee implements ServiceDiscoveryHandler,CSeeHandler,SocketClientHandler {
+	private String name;
+	private final ExecutorService cseeExecutor = Executors.newSingleThreadExecutor();
+	private final ExecutorService socketClientExecutor = Executors.newSingleThreadExecutor();
+	private final ExecutorService dnssdBrowserExecutor = Executors.newSingleThreadExecutor();
+	private boolean cseeInitialized = false;;
+	private boolean socketClientInitialized = false;
+	private ICSee csee;
 	private WebSocketClient client;
-	private ExecutorService dnsServiceBrowser;
 	
-	public MSee(){
-		csee = new CSee();
-		dnsServiceBrowser = Executors.newSingleThreadExecutor();
-		dnsServiceBrowser.execute(new RobotServiceListener(this));
+	public MSee(String name){
+		this.name = name;
+		// start the background threads
+		dnssdBrowserExecutor.execute(new RobotServiceListener(this));
+		cseeExecutor.execute(new CSee(this));
+		socketClientExecutor.execute(new Client(this));
 	}
 
 	@Override
@@ -36,9 +46,8 @@ public class MSee implements ServiceDiscoveryHandler {
             ClientUpgradeRequest request = new ClientUpgradeRequest();
             client.connect(robot,destUri,request);
             System.out.printf("Connecting to : %s%n",destUri);
-        	if(dnsServiceBrowser!=null){
-        		dnsServiceBrowser.shutdown();
-        		dnsServiceBrowser = null;
+        	if(dnssdBrowserExecutor!=null){
+        		dnssdBrowserExecutor.shutdown();
         	}
         }
         catch (Throwable t)
@@ -48,20 +57,43 @@ public class MSee implements ServiceDiscoveryHandler {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println("starting MSee server ... ");
- 
-		MSee msee = new MSee();
+		String name = args[0];  //since there can be more than one instance of MSee interacting with the robot and the console, it is important to name them
+		
+		System.out.println("MSee starting ...");
+		
+		MSee msee = new MSee(name); 
+		//creating an msee instance initializes the system
+		//1 - the c++ core CSee is instantiated and attached cameras and lidars are discovered.  
+        //          1) configuration file is checked for additional configuration settings
+		//          2) based on discovered sources and configuration settings, the gstreamer pipeline is configured
+		//2 - a client thread is instantiated, this manages communications with the robot
+		//			upon connecting to the robot:
+		//          1) the computer vision configuration of this instance is sent to the robot
 
-    	boolean done = false;
-
-		while(!done){
+		long start = (new Date()).getTime();
+		while(!msee.isInitialized()){
+			long now = (new Date()).getTime();
+			if(now-start > 60000) {
+				System.err.println("Initialization failed, aborting!");
+				System.exit(1);
+			}
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				
+				System.err.println("Thread error, aborting!");
+				System.exit(1);
 			}
 		}
-    	msee.close();		    	
+
+		
+		msee.start(); //starts the robot communications client and starts streaming
+		//3 - streaming is started with default channel (first channel or set in configuration file)
+
+		//program will stay running :
+		
+		msee.stop(); //starts the robot communications client and starts streaming
+
+		System.exit(0);
 	}
 
 	public void close() {
@@ -76,13 +108,47 @@ public class MSee implements ServiceDiscoveryHandler {
 	           e.printStackTrace();
 	        }
     	}
-    	if(dnsServiceBrowser!=null){
-    		dnsServiceBrowser.shutdown();
-    		dnsServiceBrowser = null;
+    	if(dnssdBrowserExecutor!=null){
+    		dnssdBrowserExecutor.shutdown();
     	}
     	if(csee!=null){
     		csee.close();    		
     	}
+	}
+	private boolean isInitialized() {
+		return cseeInitialized && socketClientInitialized; 
+	}
+
+	private void stop() {
+		System.out.println("MSee shutting down ...");
+		//TODO free resources and stop processes
+		
+	}
+
+	private void start() {
+		System.out.println("MSee starting ...");
+		csee.start();
+		csee.stop();
+	}
+
+	@Override
+	public synchronized void onSocketClientInitialized() {
+		this.socketClientInitialized = true;
+	}
+
+	@Override
+	public synchronized void onCSeeInitialized(ICSee csee) {
+		this.csee = csee;
+		this.cseeInitialized = true;		
+	}
+
+	@Override
+	public synchronized String getName(){return name;}
+
+	@Override
+	public void onCSeeStopped() {
+		System.out.println("CSee has stopped");
+		
 	}
 
 }
