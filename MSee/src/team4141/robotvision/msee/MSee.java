@@ -112,7 +112,7 @@ public class MSee implements ServiceDiscoveryHandler,CSeeHandler,SocketClientHan
     		dnssdBrowserExecutor.shutdown();
     	}
     	if(csee!=null){
-    		csee.close();    		
+    		csee.stop();    		
     	}
 	}
 	private boolean isInitialized() {
