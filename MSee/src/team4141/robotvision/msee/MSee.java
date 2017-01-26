@@ -3,31 +3,34 @@ package team4141.robotvision.msee;
 
 import java.net.URI;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
-import team4141.robotvision.msee.scratch.CSeeScratch;
 
 
-public class MSee implements ServiceDiscoveryHandler,CSeeHandler,SocketClientHandler {
+public class MSee implements CSeeHandler,SocketClientHandler, DiscoveryHandler, ServiceDiscoveryHandler {
 	private String name;
+	private final ExecutorService discoverExecutor = Executors.newSingleThreadExecutor();
 	private final ExecutorService cseeExecutor = Executors.newSingleThreadExecutor();
 	private final ExecutorService socketClientExecutor = Executors.newSingleThreadExecutor();
 	private final ExecutorService dnssdBrowserExecutor = Executors.newSingleThreadExecutor();
+	private boolean discoveryCompleted = false;
 	private boolean cseeInitialized = false;;
 	private boolean socketClientInitialized = false;
 	private ICSee csee;
 	private WebSocketClient client;
+	private HashMap<String, Source> sources;
 	
 	public MSee(String name){
 		this.name = name;
 		// start the background threads
 		dnssdBrowserExecutor.execute(new RobotServiceListener(this));
-		cseeExecutor.execute(new CSee(this));
 		socketClientExecutor.execute(new Client(this));
+		discoverExecutor.execute(new DiscoverDevices(this));
 	}
 
 	@Override
@@ -72,6 +75,7 @@ public class MSee implements ServiceDiscoveryHandler,CSeeHandler,SocketClientHan
 
 		long start = (new Date()).getTime();
 		while(!msee.isInitialized()){
+//			while(true){			
 			long now = (new Date()).getTime();
 			if(now-start > 60000) {
 				System.err.println("Initialization failed, aborting!");
@@ -80,8 +84,6 @@ public class MSee implements ServiceDiscoveryHandler,CSeeHandler,SocketClientHan
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				System.err.println("Thread error, aborting!");
-				System.exit(1);
 			}
 		}
 
@@ -115,9 +117,11 @@ public class MSee implements ServiceDiscoveryHandler,CSeeHandler,SocketClientHan
     		csee.stop();    		
     	}
 	}
+
 	private boolean isInitialized() {
-		return cseeInitialized && socketClientInitialized; 
+		return discoveryCompleted  && cseeInitialized && socketClientInitialized; 
 	}
+
 
 	private void stop() {
 		System.out.println("MSee shutting down ...");
@@ -135,7 +139,14 @@ public class MSee implements ServiceDiscoveryHandler,CSeeHandler,SocketClientHan
 	public synchronized void onSocketClientInitialized() {
 		this.socketClientInitialized = true;
 	}
-
+	
+	@Override
+	public synchronized void onDiscoveryCompleted(HashMap<String,Source> sources) {
+		this.discoveryCompleted = true;
+		this.sources = sources;
+		cseeExecutor.execute(new CSee(this));
+	}
+	
 	@Override
 	public synchronized void onCSeeInitialized(ICSee csee) {
 		this.csee = csee;
