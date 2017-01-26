@@ -6,6 +6,11 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/types_c.h"
 
+#ifndef _countof
+#define _countof(_Array) (int)(sizeof(_Array) / sizeof(_Array[0]))
+#endif
+
+
 template<int> struct BaseType { };
 template<> struct BaseType<CV_8S>  { using base_type = int8_t; };
 template<> struct BaseType<CV_8U>  { using base_type = uint8_t; };
@@ -15,9 +20,11 @@ template<> struct BaseType<CV_32S> { using base_type = int32_t; };
 template<> struct BaseType<CV_32F> { using base_type = float; };
 template<> struct BaseType<CV_64F> { using base_type = double; };
 
-LidarSource::LidarSource()
+LidarSource::LidarSource(std::string device)
 {
-	ready = false;
+	isSimulation = false;
+	opt_com_baudrate = 115200;
+	opt_com_path = device.c_str();
 }
 
 LidarSource::~LidarSource()
@@ -25,19 +32,80 @@ LidarSource::~LidarSource()
 	scan.clear();
 }
 
-bool LidarSource::isReady(){
-	return ready;
+
+void LidarSource::initialize(){
+	if(isSimulation) return;
+    drv = RPlidarDriver::CreateDriver(RPlidarDriver::DRIVER_TYPE_SERIALPORT);
+
+    if (!drv) {
+        fprintf(stderr, "insufficent memory, exit\n");
+        exit(-2);
+    }
+    // make connection...
+    if (IS_FAIL(drv->connect(opt_com_path, opt_com_baudrate))) {
+        fprintf(stderr, "Error, cannot bind to the specified serial port %s.\n"
+            , opt_com_path);
+        RPlidarDriver::DisposeDriver(drv);
+        exit(-2);
+    }
+
+    printf("Connected!\n");
+	drv->startMotor();
+	drv->startScanExpress(false);
+
+}
+
+void LidarSource::shutdown(){
+	if(isSimulation) return;
+	    drv->stop();
+	    drv->stopMotor();
+	    RPlidarDriver::DisposeDriver(drv);
+}
+
+void LidarSource::grabData(){
+	scan.clear();
+	if (isSimulation){
+		simulate();
+		printf("next frame\n");
+	}
+	else{
+		//grab the next set of data
+        rplidar_response_measurement_node_t nodes[360*2];
+        size_t   count = _countof(nodes);
+
+        op_result = drv->grabScanData(nodes, count);
+
+        if (IS_OK(op_result)) {
+//            drv->ascendScanData(nodes, count);
+
+            for (int pos = 0; pos < (int)count ; ++pos) {
+            	bool isSynch = nodes[pos].sync_quality & RPLIDAR_RESP_MEASUREMENT_SYNCBIT;
+            	float angle = (nodes[pos].angle_q6_checkbit >> RPLIDAR_RESP_MEASUREMENT_ANGLE_SHIFT)/64.0f;
+            	float distance = nodes[pos].distance_q2/4.0f;
+            	char quality = nodes[pos].sync_quality >> RPLIDAR_RESP_MEASUREMENT_QUALITY_SHIFT;
+
+//            	printf("readings.push_back({%d,%f,%f,%d});\n",isSynch,angle,distance,quality);
+
+                printf("%s theta: %03.2f Dist: %08.2f Q: %d \n",
+                    (isSynch) ?"S ":"  ",
+                    angle,
+                    distance,
+                    quality);
+                Reading reading(isSynch,angle,distance,quality);
+                scan.push_back(reading);
+            }
+        }
+
+	}
 }
 
 void LidarSource::showScan()
 {
+	scan.clear();
 	cv::namedWindow("LIDAR", cv::WINDOW_AUTOSIZE);// Create a window for display.
 	while (cv::waitKey(20) < 0){
-		if (!isReady()){
-			simulate();
-			printf("next frame\n");
-		}
-		if (isReady() && scan.size() > 0){
+		grabData();
+		if (scan.size() > 0){
 			cv::Mat img(2 * (int)(Reading::range / 10), 2 * ((int)Reading::range / 10), CV_8UC1, 255);
 			for (Reading reading : scan){
 				if (reading.getQuality() != 0){
@@ -47,13 +115,15 @@ void LidarSource::showScan()
 				}
 			}
 			cv::imshow("LIDAR", img);
-			this->ready = false;
+			scan.clear();
 		}
 	}
 }
 
 void LidarSource::imageScan()
 {
+	scan.clear();
+	grabData();
 	//create an image (png) representing the scan
 	//use opencv
 	if (scan.size() > 0){
@@ -82,6 +152,8 @@ void LidarSource::imageScan()
 
 void LidarSource::saveScan()
 {
+	scan.clear();
+	grabData();
 	std::ofstream file;
 	if (this->fileName.size() > 0){
 		file.open((this->fileName).c_str());
@@ -110,6 +182,10 @@ void LidarSource::saveScan()
 	}
 	file.flush();
 	file.close();
+}
+
+void LidarSource::setSimulate(bool simulate){
+	this->isSimulation = simulate;
 }
 
 void LidarSource::simulate()
@@ -416,6 +492,5 @@ void LidarSource::simulate()
 	scan.push_back(Reading(0, 348.468750, 1260.000000, 47 ));
 	scan.push_back(Reading(0, 349.546875, 1506.000000, 47 ));
 	scan.push_back(Reading(0, 350.625000, 1730.000000, 47 ));
-	ready = true;
 }
 

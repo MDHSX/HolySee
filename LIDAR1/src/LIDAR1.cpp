@@ -114,7 +114,7 @@ int main() {
 	drv->startScanExpress(false);
 
     // fetech result and print it out...
-//    while (1) {
+    while (1) {
         rplidar_response_measurement_node_t nodes[360*2];
         size_t   count = _countof(nodes);
 
@@ -136,9 +136,10 @@ int main() {
                     angle,
                     distance,
                     quality);
+
             }
         }
-//    }
+    }
 
     drv->stop();
     drv->stopMotor();
