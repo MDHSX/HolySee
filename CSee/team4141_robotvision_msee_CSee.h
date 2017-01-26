@@ -39,29 +39,6 @@ JNIEXPORT void JNICALL Java_team4141_robotvision_msee_CSee_stop
 JNIEXPORT void JNICALL Java_team4141_robotvision_msee_CSee_switchTo
   (JNIEnv *, jobject, jstring);
 
-/*
- * Class:     team4141_robotvision_msee_CSee
- * Method:    setCameraProperty
- * Signature: (IILjava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_team4141_robotvision_msee_CSee_setCameraProperty
-  (JNIEnv *, jobject, jint, jint, jstring);
-
-/*
- * Class:     team4141_robotvision_msee_CSee
- * Method:    setFilter
- * Signature: (Ljava/lang/String;Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_team4141_robotvision_msee_CSee_setFilter
-  (JNIEnv *, jobject, jstring, jstring);
-
-/*
- * Class:     team4141_robotvision_msee_CSee
- * Method:    getConfig
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_team4141_robotvision_msee_CSee_getConfig
-  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }
