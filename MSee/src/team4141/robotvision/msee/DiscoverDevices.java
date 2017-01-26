@@ -19,10 +19,10 @@ public class DiscoverDevices implements Runnable{
 
 	DiscoveryHandler handler;
 	private HashMap<String,Source> sources;
-	private static String DISCOVER_USB_COMMAND="w:/lshw.bat";
-	private static String DISCOVER_CAMERAS_COMMAND="w:/v4l2.bat";
-	private static String DISCOVER_CAMERA_CONTROLS_COMMAND="w:/v4l2-controls.bat";
-	private static String DISCOVER_CAMERA_INFO_COMMAND="w:/v4l2-all.bat";
+	private static String DISCOVER_USB_COMMAND="/usr/local/msee/lshw.sh";
+	private static String DISCOVER_CAMERAS_COMMAND="/usr/local/msee/v4l2.sh";
+	private static String DISCOVER_CAMERA_CONTROLS_COMMAND="/usr/local/msee/v4l2-controls.sh";
+	private static String DISCOVER_CAMERA_INFO_COMMAND="/usr/local/msee/v4l2-all.sh";
 	
 	public DiscoverDevices(DiscoveryHandler handler) {
 		this.sources = new HashMap<String,Source>();
