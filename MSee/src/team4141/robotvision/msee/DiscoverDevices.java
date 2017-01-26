@@ -113,8 +113,6 @@ public class DiscoverDevices implements Runnable{
 			parseCameraControlsInfo(dev,result);
 			sources.put(dev.getName(), dev);
 		}
-		//TODO: Refactor to match config identifyer and only add these
-		//sources.addAll(cameras);
 	}
 
 	private void parseCameraInfo(Source source, String cameraDetails) {
@@ -312,7 +310,7 @@ public class DiscoverDevices implements Runnable{
 
 	private void parseUSBInfo(String usbText) {
 		// data is in the format of:
-//		H/W path             Device     Class      Description
+//		Bus info             Device     Class      Description
 //		======================================================
 //		/0/100/1f.2/0/1      /dev/sda1  volume     40GiB Linux raid autodetect partition
 //		/0/100/1f.2/0/2      /dev/sda2  volume     509MiB Linux raid autodetect partition
@@ -327,7 +325,7 @@ public class DiscoverDevices implements Runnable{
 //		String idSeparator=":";
 //		String addressDelimiter=":";
 		String devToken="/dev/";
-		String keyHWPathField="H/W path";
+		String keyHWPathField="Bus info";
 		String keyDeviceField="Device";
 		String keyClassField="Class";
 		String keyDescriptionField="Description";
@@ -339,61 +337,66 @@ public class DiscoverDevices implements Runnable{
 		List<String> fields = new ArrayList<String>();  // to track the order in which they came in
 		List<Integer> fieldPositions = new ArrayList<Integer>();  // to track the start position of each field in the order in which they came in
 		
-		if(lineTokenizer.countTokens()>2){  //first two lines are table header
-			//parse the first line, it has the # of fields and the position of each field
-			String line = lineTokenizer.nextToken();
-			if(line.contains(keyHWPathField)){
-				fieldPositions.add(line.indexOf(keyHWPathField));
-				fields.add(keyHWPathField);
-			}
-			if(line.contains(keyDeviceField)){
-				fieldPositions.add(line.indexOf(keyDeviceField));
-				fields.add(keyDeviceField);
-			}
-			if(line.contains(keyClassField)){
-				fieldPositions.add(line.indexOf(keyClassField));
-				fields.add(keyClassField);
-			}
-			if(line.contains(keyDescriptionField)){
-				fieldPositions.add(line.indexOf(keyDescriptionField));
-				fields.add(keyDescriptionField);
-			}
-			line = lineTokenizer.nextToken(); //skip the separator line
-			while(lineTokenizer.hasMoreTokens()){
-				line = lineTokenizer.nextToken();
-				for(int i=0;i<fieldPositions.size();i++){
-					int start = fieldPositions.get(i);
-					String data;
-					if(i==fieldPositions.size()-1){
-						//on last field
-						data=line.substring(start).trim();
-					}
-					else
-					{
-						int end = fieldPositions.get(i+1);
-						data=line.substring(start,end).trim();
-					}
-					if(keyHWPathField.equals(fields.get(i))){
-						hwPath = data;
-					}
-					if(keyDeviceField.equals(fields.get(i))){
-						device = data;
-					}
-					if(keyClassField.equals(fields.get(i))){
-						deviceClass = data;
-					}
-					if(keyDescriptionField.equals(fields.get(i))){
-						description = data;
-					}
-					
+		String line = lineTokenizer.nextToken();  //get the first line
+		
+		//if line starts with WARNING: disgregard it
+		if(line.startsWith("WARNING:")) line = lineTokenizer.nextToken();
+		if(line.contains(keyHWPathField)){
+			fieldPositions.add(line.indexOf(keyHWPathField));
+			fields.add(keyHWPathField);
+		}
+		if(line.contains(keyDeviceField)){
+			fieldPositions.add(line.indexOf(keyDeviceField));
+			fields.add(keyDeviceField);
+		}
+		if(line.contains(keyClassField)){
+			fieldPositions.add(line.indexOf(keyClassField));
+			fields.add(keyClassField);
+		}
+		if(line.contains(keyDescriptionField)){
+			fieldPositions.add(line.indexOf(keyDescriptionField));
+			fields.add(keyDescriptionField);
+		}
+		line = lineTokenizer.nextToken(); //skip the separator line
+		
+		while(lineTokenizer.hasMoreTokens()){
+			line = lineTokenizer.nextToken();
+			for(int i=0;i<fieldPositions.size();i++){
+				int start = fieldPositions.get(i);
+				String data;
+				if(i==fieldPositions.size()-1){
+					//on last field
+					data=line.substring(start).trim();
+				}
+				else
+				{
+					int end = fieldPositions.get(i+1);
+					data=line.substring(start,end).trim();
+				}
+				if(keyHWPathField.equals(fields.get(i))){
+					hwPath = data;
+				}
+				if(keyDeviceField.equals(fields.get(i))){
+					device = data;
+				}
+				if(keyClassField.equals(fields.get(i))){
+					deviceClass = data;
+				}
+				if(keyDescriptionField.equals(fields.get(i))){
+					description = data;
 				}
 				
-				if(device!=null  && device.length()>devToken.length() && device.contains(devToken) && description!=null && sources.containsKey(description)){
-					//bare minimum we need device and description
-					sources.put(description,new USBDevice(device, description));
-				}								
 			}
+//			if(device!=null  && device.length()>devToken.length() && device.contains(devToken) && description!=null){
+//				//testing
+//				System.out.printf("%s|%s|%s|%s\n", hwPath,device,deviceClass,description 	);
+//			}								
+			if(device!=null  && device.length()>devToken.length() && device.contains(devToken) && description!=null && sources.containsKey(description)){
+				//bare minimum we need device and description
+				sources.put(description,new USBDevice(device, description));
+			}								
 		}
+
 	}
 
 	private String discover(String... command) {
