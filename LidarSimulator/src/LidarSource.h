@@ -23,7 +23,7 @@ private:
 	u_result   op_result;
 
 public:
-	LidarSource(std::string);
+	LidarSource(const char*);
 	~LidarSource();
 	void initialize();
 	void setSimulate(bool);

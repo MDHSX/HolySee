@@ -20,11 +20,12 @@ template<> struct BaseType<CV_32S> { using base_type = int32_t; };
 template<> struct BaseType<CV_32F> { using base_type = float; };
 template<> struct BaseType<CV_64F> { using base_type = double; };
 
-LidarSource::LidarSource(std::string device)
+LidarSource::LidarSource(const char * device)
 {
 	isSimulation = false;
 	opt_com_baudrate = 115200;
-	opt_com_path = device.c_str();
+	opt_com_path = device;
+	printf("path: %s\n",device);
 }
 
 LidarSource::~LidarSource()
